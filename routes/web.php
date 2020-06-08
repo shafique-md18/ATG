@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Route::get('/', 'TestController@show');
+
+Route::get('/', 'ATGController@index');
+
+Route::post('/', 'ATGController@store');
