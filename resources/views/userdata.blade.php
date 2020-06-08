@@ -2,8 +2,6 @@
 
 @section ('content')
 
-
-
 <div class="card mb-4">
     <div class="card-body">
 		<h4 style="text-decoration: underline; font-family: Open Sans">User Data</h4>
@@ -17,17 +15,24 @@
 		    </tr>
 		  </thead>
 		  <tbody>
-		  	@foreach ($records as $record)
-		  	<tr>
-		      <th scope="row">{{ $loop->index + 1 }}</th>
-		      <td>{{ $record->name }}</td>
-		      <td>{{ $record->email }}</td>
-		      <td>{{ $record->pincode }}</td>
-		    </tr>
-			@endforeach
-
+		  	@isset($records)
+			    @foreach ($records as $record)
+				  	<tr>
+				      <th scope="row">{{ $loop->index + 1 }}</th>
+				      <td>{{ $record->name }}</td>
+				      <td>{{ $record->email }}</td>
+				      <td>{{ $record->pincode }}</td>
+				    </tr>
+				@endforeach
+			@endisset
 		  </tbody>
 		</table>
+		@empty($records)
+			<div class="{{ $message['classes'] }}">
+              <i class="fas fa-times pr-2"></i>
+              {{ $message['body'] }}
+          </div>   
+		@endempty
 	</div>
 </div>
 
