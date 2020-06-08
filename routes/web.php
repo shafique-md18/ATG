@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/', 'TestController@show');
+Route::get('/userdata/', 'ATGController@show_user_data');
 
 Route::get('/', 'ATGController@index');
 

@@ -35,13 +35,39 @@ class ATGController extends Controller
      */
     public function store(Request $request)
     {
+        // validate form data
         $validatedData = $request->validate([
             'name' => 'required',
             'email' => 'required|email:rfc,dns',
             'pincode' => 'required|digits:6',
         ]);
 
-        $message = array('classes' => 'alert alert-success', 'body' => 'Information submitted successfully!');
+        // check if entered record already exists
+        $num_records = ATG::where('name', $validatedData['name'])
+                            ->where('email', $validatedData['email'])
+                            ->where('pincode', $validatedData['pincode'])
+                            ->count();
+
+        if ($num_records > 0)
+        {
+           $message = array('classes' => 'alert alert-danger', 
+                'body' => 'Same record already exists!',
+                'success' => 0); 
+            return view('home')->with('message', $message);
+        }
+
+
+        // save to database
+
+        $atg = new ATG;
+
+        $atg->name = $validatedData['name'];
+        $atg->email = $validatedData['email'];
+        $atg->pincode = $validatedData['pincode'];
+
+        $atg->save();
+
+        $message = array('classes' => 'alert alert-success', 'body' => 'Information submitted successfully!', 'success' => 1);
 
         return view('home')->with('message', $message);
     }
@@ -57,6 +83,27 @@ class ATGController extends Controller
         $atg = ATG::findOrFail($id);
 
         return atg;
+    }
+
+    /**
+     * Display all the records
+     *
+     * @param  int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function show_user_data()
+    {
+        $records = ATG::all();
+
+        // if no records present
+        if ($records->count() == 0)
+        {
+            $message = array('classes' => 'alert alert-danger', 'body' => 'No data to show!');
+
+            return view('userdata')->with('message', $message); 
+        }
+        
+        return view('userdata')->with('records', $records);
     }
 
     /**

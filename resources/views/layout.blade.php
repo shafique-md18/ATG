@@ -21,6 +21,9 @@
         <!-- Google Fonts -->
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400&display=swap" rel="stylesheet"> 
 
+        <!-- Font Awesome -->
+        <script src="https://kit.fontawesome.com/57cbd50427.js" crossorigin="anonymous"></script>
+
         <style>
             .body {
                 font-family: Open Sans;
@@ -38,7 +41,8 @@
     <body>
         <div class="container">
             <nav class="navbar navbar-light bg-light mb-4 mt-4">
-              <a class="navbar-brand" href="{{ url('/') }}" style="font-family: Open Sans 400; font-size: 1.8rem;">HOME</a>
+              <a class="navbar-brand" href="{{ url('/') }}" style="font-family: Open Sans 400; font-size: 1.8rem;">
+                <i class="fas fa-home pr-2"></i>Home</a>
             </nav>
 
             @yield ('content')
