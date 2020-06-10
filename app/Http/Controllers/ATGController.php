@@ -6,6 +6,7 @@ use App\ATG;
 use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\Log;
 
 class ATGController extends Controller
 {
@@ -59,8 +60,7 @@ class ATGController extends Controller
         }
 
 
-        // save to database
-
+        // save the info to db
         $atg = new ATG;
 
         $atg->name = $validatedData['name'];
@@ -72,7 +72,13 @@ class ATGController extends Controller
         $message = array('classes' => 'alert alert-success', 'body' => 'Information submitted successfully! Email Sent !', 'success' => 1);
 
         // send email
-        Mail::to($atg->email)->send(new WelcomeMail($atg));
+        try {
+            Mail::to($atg->email)->send(new WelcomeMail($atg));   
+            // log email
+            Log::channel('atg_log')->info('[ATGController.php] Email sent to '.$atg->email);
+        } catch (Exception $e) {
+            Log::channel('atg_log')->error($e);
+        }
 
         return view('home')->with('message', $message);
     }
