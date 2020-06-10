@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\ATG;
+use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 
 class ATGController extends Controller
 {
@@ -67,7 +69,10 @@ class ATGController extends Controller
 
         $atg->save();
 
-        $message = array('classes' => 'alert alert-success', 'body' => 'Information submitted successfully!', 'success' => 1);
+        $message = array('classes' => 'alert alert-success', 'body' => 'Information submitted successfully! Email Sent !', 'success' => 1);
+
+        // send email
+        Mail::to($atg->email)->send(new WelcomeMail($atg));
 
         return view('home')->with('message', $message);
     }

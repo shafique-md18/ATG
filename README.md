@@ -7,7 +7,7 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
 </p>
 
-## ATG Task 1
+## ATG Task 1 (commit: 110ddf849fcfebcde51520fae08e740d27c985df)
 
 Please read and learn about these topics wrt laravel,
 - Models, Views, Controller, Routing
@@ -30,3 +30,35 @@ already exists in the DB.
 tracked via the free web server.
 - Proper use of Models, Controllers, Views is mandatory.
 - Use of objects using model classes preferred.
+
+
+## ATG Task 2 
+
+Task 2
+
+- Model, View created in task 1 should NOT be changed in this task. If need arises, ask on
+the group with clarification. 
+- When user successfully enters new/different data (that is accepted into database), user
+should get an email ( for this task, you can just put a LOG statement that ‘EMAIL SENT’
+OR you can code that also, if you wish ;-) ). If the email sending fails, we should be able
+to LOG that error as well.
+- Create a Restful API in a new controller file (WebServicesController.php) for the same
+deliverables/tasks in task 1. Choose human readable API request and response with
+status:0|1 and message as two mandatory response keys.
+- Eloquent and email logic should be moved to a common ‘PHP trait’ file. At end of this
+task, there should be NO duplicate statement inside class in both the controllers. Take
+your own fair judgement on how will you move the logic into the trait file and reuse that
+trait function in both controllers.
+
+Mode of submission:
+As part of submission,
+- Send a < 30 sec video (with your audio) demonstrating the following:
+ - Show your laravel log file. Should be empty or not there.
+ - Call the API (using postman). Explain the API response. Log statement should be
+recorded that ‘EMAIL SENT’
+ - Call the API again (with same parameters). Explain API response. Log statement
+should NOT be recorded.
+ - Insert same parameters in the web form. Log statement should NOT be seen and
+the ERROR message should be seen.
+ - Insert new parameters in the web form. Log statement should be seen and the
+SUCCESS message should be seen.
