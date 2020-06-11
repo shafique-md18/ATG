@@ -5,17 +5,17 @@ namespace App\Http\Controllers;
 use App\ATG;
 use App\Http\Resources\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
 use App\Http\Resources\UserCollection;
 use App\Mail\WelcomeMail;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Traits\UserTrait;
 
 
 class WebServicesController extends Controller
 {
+    use UserTrait;
+
     /**
-     * Display a listing of the resource.
+     * Send all user info using pagination
      *
      * @return App\Http\Resources\ATG
      */
@@ -35,21 +35,15 @@ class WebServicesController extends Controller
 
 
     /**
-     * Store a newly created resource in storage.
+     * Store user info
      *
      * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return JSON data
      */
     public function store(Request $request)
     {
-        // validate the data
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email:rfc,dns',
-            'pincode' => 'required|digits:6',
-        ]);
-
-        if ($validator->fails()) {
+        if ($this->validateUserData($request->all()) == false)
+        {
             return [
                 'status' => '0',
                 'message' => 'Information submitted is not valid! Please check the data!',
@@ -57,13 +51,7 @@ class WebServicesController extends Controller
             ];        
         }
 
-        // check if entered record already exists
-        $num_records = ATG::where('name', $request['name'])
-                            ->where('email', $request['email'])
-                            ->where('pincode', $request['pincode'])
-                            ->count();
-
-        if ($num_records > 0)
+        if ($this->checkRecordExists($request->all()))
         {
             return [
                 'status' => '0',
@@ -72,23 +60,11 @@ class WebServicesController extends Controller
             ];
         }
 
-        // save the info to db
-        $atg = new ATG;
-
-        $atg->name = $request['name'];
-        $atg->email = $request['email'];
-        $atg->pincode = $request['pincode'];
-
-        $atg->save();
+        // save this record
+        $atg = $this->saveRecord($request->all());
 
         // send email
-        try {
-            Mail::to($atg->email)->send(new WelcomeMail($atg));   
-            // log email
-            Log::channel('atg_log')->info('[ATGController.php] Email sent to '.$atg->email);
-        } catch (Exception $e) {
-            Log::channel('atg_log')->error($e);
-        }
+        $this->sendAndLogEmail($atg);
 
         return [
             'status' => '1',

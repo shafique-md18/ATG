@@ -5,11 +5,11 @@ namespace App\Http\Controllers;
 use App\ATG;
 use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\Log;
+use App\Http\Controllers\Traits\UserTrait;
 
 class ATGController extends Controller
 {
+    use UserTrait;
     /**
      * Display a listing of the resource.
      *
@@ -38,20 +38,12 @@ class ATGController extends Controller
      */
     public function store(Request $request)
     {
-        // validate form data
-        $validatedData = $request->validate([
-            'name' => 'required',
-            'email' => 'required|email:rfc,dns',
-            'pincode' => 'required|digits:6',
-        ]);
+        if ($this->validateUserData($request->all()) == false)
+        {
+            return view('home')->withErrors($this->validator); 
+        }
 
-        // check if entered record already exists
-        $num_records = ATG::where('name', $validatedData['name'])
-                            ->where('email', $validatedData['email'])
-                            ->where('pincode', $validatedData['pincode'])
-                            ->count();
-
-        if ($num_records > 0)
+        if ($this->checkRecordExists($request->all()))
         {
            $message = array('classes' => 'alert alert-danger', 
                 'body' => 'Same record already exists!',
@@ -59,26 +51,13 @@ class ATGController extends Controller
             return view('home')->with('message', $message);
         }
 
+        // save this record
+        $atg = $this->saveRecord($request->all());
 
-        // save the info to db
-        $atg = new ATG;
-
-        $atg->name = $validatedData['name'];
-        $atg->email = $validatedData['email'];
-        $atg->pincode = $validatedData['pincode'];
-
-        $atg->save();
+        // send and log email
+        $this->sendAndLogEmail($atg);
 
         $message = array('classes' => 'alert alert-success', 'body' => 'Information submitted successfully! Email Sent !', 'success' => 1);
-
-        // send email
-        try {
-            Mail::to($atg->email)->send(new WelcomeMail($atg));   
-            // log email
-            Log::channel('atg_log')->info('[ATGController.php] Email sent to '.$atg->email);
-        } catch (Exception $e) {
-            Log::channel('atg_log')->error($e);
-        }
 
         return view('home')->with('message', $message);
     }
@@ -99,7 +78,7 @@ class ATGController extends Controller
     /**
      * Display all the records
      *
-     * @param  int $id
+     * @param 
      * @return \Illuminate\Http\Response
      */
     public function show_user_data()
