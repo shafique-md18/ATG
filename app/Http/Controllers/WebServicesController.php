@@ -45,7 +45,7 @@ class WebServicesController extends Controller
         if ($this->validateUserData($request->all()) == false)
         {
             return [
-                'status' => '0',
+                'status' => 0,
                 'message' => 'Information submitted is not valid! Please check the data! Required Parameters: name, email, pincode',
                 'data' => $request->all()
             ];        
@@ -54,7 +54,7 @@ class WebServicesController extends Controller
         if ($this->checkRecordExists($request->all()))
         {
             return [
-                'status' => '0',
+                'status' => 0,
                 'message' => 'Same record already exists!',
                 'data' => $request->all()
             ];
@@ -67,7 +67,7 @@ class WebServicesController extends Controller
         $this->sendAndLogEmail($atg);
 
         return [
-            'status' => '1',
+            'status' => 1,
             'message' => 'Successfully received information and saved to database!',
             'data' => $request->all()
         ];
@@ -105,7 +105,7 @@ class WebServicesController extends Controller
 
         if ($validator->fails()) {
             return [
-                'status' => '0',
+                'status' => 0,
                 'message' => 'Information submitted is not valid! Please check the email data!'
             ];        
         }
@@ -114,13 +114,13 @@ class WebServicesController extends Controller
 
         if ($atgs->count() == 0) {
             return [
-                'status' => '0',
+                'status' => 0,
                 'message' => 'No records associated with this email found!'
             ];;
         }
 
         return User::collection($atgs)->additional([
-            'status' => '1',
+            'status' => 1,
             'message' => 'successfully processed data'
         ]);
     }
