@@ -46,7 +46,7 @@ class WebServicesController extends Controller
         {
             return [
                 'status' => '0',
-                'message' => 'Information submitted is not valid! Please check the data!',
+                'message' => 'Information submitted is not valid! Please check the data! Required Parameters: name, email, pincode',
                 'data' => $request->all()
             ];        
         }
