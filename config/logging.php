@@ -35,11 +35,6 @@ return [
     */
 
     'channels' => [
-        'atg_log' => [
-            'driver' => 'single',
-            'path' => storage_path('logs/emails.log'),
-            'level' => 'critical',
-        ],
         'stack' => [
             'driver' => 'stack',
             'channels' => ['single'],

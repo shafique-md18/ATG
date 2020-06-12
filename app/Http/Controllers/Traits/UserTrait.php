@@ -87,9 +87,9 @@ trait UserTrait
         try {
             Mail::to($atg->email)->send(new WelcomeMail($atg));   
             // log email
-            Log::channel('atg_log')->info('[ATGController.php] Email sent to '.$atg->email);
+            Log::channel('single')->info('[ATGController.php] Email sent to '.$atg->email);
         } catch (Exception $e) {
-            Log::channel('atg_log')->error($e);
+            Log::channel('single')->debug($e);
         }
     }
 }

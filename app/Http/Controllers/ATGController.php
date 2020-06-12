@@ -6,6 +6,7 @@ use App\ATG;
 use App\Mail\WelcomeMail;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Traits\UserTrait;
+use Illuminate\Support\Facades\Log;
 
 class ATGController extends Controller
 {
