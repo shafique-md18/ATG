@@ -27,7 +27,7 @@ class WebServicesController extends Controller
         // Return collection of atgs as resource
         return (User::collection($atgs)->additional(
             [
-                'status' => '1',
+                'status' => 1,
                 'message' => 'data sent successfully'
             ]
         ));
