@@ -134,38 +134,6 @@
       });
     });
   });
-
-  // document.getElementById('submit').addEventListener('click', formSubmit);
-
-  function formSubmit(event) {
-    // event.preventDefault();
-    let xhr = new XMLHttpRequest();
-
-    xhr.open('GET', '/api/users/', true);
-
-    xhr.onload = function() {
-      if (this.status == 200) {
-        var form = document.getElementById('myForm');
-        if (form.checkValidity() === true) {
-          if (document.getElementById('pincode').value.length != 6) {
-            createMessageAlert(['pincode must be 6 digits'], 0);
-          } else {
-            document.getElementById('message').innerHTML = '';
-          }
-          var errors = {
-            'name': 'name is required',
-            'email': 'wrong email format',
-            'pincode': 'pincode must be 6 digits'
-          }
-          var response = JSON.parse(this.responseText);
-          // createMessageAlert(Object.values(errors), 0);
-          console.clear();
-        }
-      }
-    }
-
-    xhr.send();
-  }
 </script>
 
 @endsection
