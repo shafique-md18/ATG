@@ -104,6 +104,11 @@
     return li;
   }
 
+  function formSubmitButtonReset() {
+    document.getElementById('submitButton').innerHTML = '<i class="fas fa-check pr-2"></i>Submit Information';
+    document.getElementById('submitButton').disabled = false;
+  }
+
   $(document).ready(function() {
     $('#myForm').on('submit', function (event) {
       if (document.getElementById('pincodeInput').value.length != 6) {
@@ -121,7 +126,18 @@
           pincode: $('#pincodeInput').val()
         },
         type: 'POST',
-        url: '/api/users'
+        url: '/api/users',
+        error: function(jqXHR, textStatus, errorThrown) {
+          createMessageAlert(['Error occured! Contact Administrator! Status code: '
+            + jqXHR.status], 0);
+          console.log('jqXHR:');
+          console.log(jqXHR);
+          console.log('textStatus:');
+          console.log(textStatus);
+          console.log('errorThrown:');
+          console.log(errorThrown);
+          formSubmitButtonReset();
+        },
       })
       .done(function (data) {
         if (data.status === 0) {
@@ -130,8 +146,7 @@
           createMessageAlert(["Information submitted successfully! Email Sent !"], 1)
           document.getElementById('myForm').reset();
         }
-        document.getElementById('submitButton').innerHTML = '<i class="fas fa-check pr-2"></i>Submit Information';
-        document.getElementById('submitButton').disabled = false;
+        formSubmitButtonReset();
       });
     });
   });
