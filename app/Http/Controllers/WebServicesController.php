@@ -28,7 +28,7 @@ class WebServicesController extends Controller
         return (User::collection($atgs)->additional(
             [
                 'status' => 1,
-                'message' => 'data sent successfully'
+                'message' => 'Data sent successfully!'
             ]
         ));
     }
@@ -47,7 +47,8 @@ class WebServicesController extends Controller
             return [
                 'status' => 0,
                 'message' => 'Information submitted is not valid! Please check the data! Required Parameters: name, email, pincode',
-                'data' => $request->all()
+                'data' => $request->all(),
+                'errors' => $this->validator->errors()
             ];        
         }
 
@@ -56,7 +57,8 @@ class WebServicesController extends Controller
             return [
                 'status' => 0,
                 'message' => 'Same record already exists!',
-                'data' => $request->all()
+                'data' => $request->all(),
+                'errors' => ['duplicate' =>'Same record already exists!']
             ];
         }
 
@@ -106,7 +108,8 @@ class WebServicesController extends Controller
         if ($validator->fails()) {
             return [
                 'status' => 0,
-                'message' => 'Information submitted is not valid! Please check the email data!'
+                'message' => 'Information submitted is not valid! Please check the email data!',
+                'errors' => $this->validator->errors()
             ];        
         }
 
@@ -115,7 +118,8 @@ class WebServicesController extends Controller
         if ($atgs->count() == 0) {
             return [
                 'status' => 0,
-                'message' => 'No records associated with this email found!'
+                'message' => 'No records associated with this email found!',
+                'errors' => 'No records associated with this email found!'
             ];;
         }
 
