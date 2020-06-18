@@ -128,6 +128,7 @@
           createMessageAlert(Object.values(data.errors), 0);
         } else {
           createMessageAlert(["Information submitted successfully! Email Sent !"], 1)
+          document.getElementById('myForm').reset();
         }
         document.getElementById('submitButton').innerHTML = '<i class="fas fa-check pr-2"></i>Submit Information';
         document.getElementById('submitButton').disabled = false;
