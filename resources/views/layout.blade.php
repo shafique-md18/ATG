@@ -37,6 +37,7 @@
             }
         </style>
 
+        @yield ('head')
     </head>
     <body>
         <div class="container">
