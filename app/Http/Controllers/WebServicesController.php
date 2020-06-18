@@ -58,7 +58,8 @@ class WebServicesController extends Controller
                 'status' => 0,
                 'message' => 'Same record already exists!',
                 'data' => $request->all(),
-                'errors' => ['duplicate' =>'Same record already exists!']
+                // same format as of the Validator->errors()
+                'errors' => ['duplicate' => ['Same record already exists!']]
             ];
         }
 

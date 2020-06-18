@@ -41,7 +41,7 @@
         @csrf
         <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" id="name" 
+            <input type="text" class="form-control" id="nameInput" 
               name="name" aria-
               describedby="emailHelp" 
               value="{{ old('name') }}" required>
@@ -49,18 +49,18 @@
         </div>
         <div class="form-group">
           <label for="email">Email address</label>
-          <input type="email" class="form-control" id="email" 
+          <input type="email" class="form-control" id="emailInput" 
             name="email" aria-describedby="emailHelp" 
             value="{{ old('email') }}" required>
           <small id="emailHelp" class="form-text text-muted">Please enter your email address</small>
         </div>
         <div class="form-group">
           <label for="pincode">Pincode</label>
-          <input type="number" class="form-control" id="pincode" 
+          <input type="number" class="form-control" id="pincodeInput" 
             name="pincode" value="{{ old('pincode') }}" required>
           <small id="pincodeHelp" class="form-text text-muted">Please enter your pincode(6 digits)</small>
         </div>
-        <button type="submit" class="btn btn-primary" id="submit"><i class="fas fa-check pr-2"></i>Submit Information</button>
+        <button type="submit" class="btn btn-primary" id="submitButton"><i class="fas fa-check pr-2"></i>Submit Information</button>
       </form>
     </div>
   </div>
@@ -85,13 +85,14 @@
     }
 
     messageDiv.appendChild(ul);
-    document.getElementById('message').innerHTML = '';
     document.getElementById('message').appendChild(messageDiv);
+
+    setTimeout(function(){ document.getElementById('message').innerHTML = '' }, 2000);
   }
 
   function createListItem(message, status) {
     var li = document.createElement('li');
-    li.style.cssText = 'list-style: none; text-transform: lowercase;';  
+    li.style.cssText = 'list-style: none;';  
     
     if (status === 0) {
       li.innerHTML = '<i class="fas fa-times pr-2"></i>'
@@ -103,7 +104,38 @@
     return li;
   }
 
-  document.getElementById('submit').addEventListener('click', formSubmit);
+  $(document).ready(function() {
+    $('#myForm').on('submit', function (event) {
+      if (document.getElementById('pincodeInput').value.length != 6) {
+        createMessageAlert(['Pincode must be 6 digits'], 0);
+        return;
+      }
+
+      document.getElementById('submitButton').innerHTML = 'Submitting...';
+      document.getElementById('submitButton').disabled = true;
+
+      $.ajax({
+        data: {
+          name: $('#nameInput').val(),
+          email: $('#emailInput').val(),
+          pincode: $('#pincodeInput').val()
+        },
+        type: 'POST',
+        url: '/api/users/'
+      })
+      .done(function (data) {
+        if (data.status === 0) {
+          createMessageAlert(Object.values(data.errors), 0);
+        } else {
+          createMessageAlert(["Information submitted successfully! Email Sent !"], 1)
+        }
+        document.getElementById('submitButton').innerHTML = '<i class="fas fa-check pr-2"></i>Submit Information';
+        document.getElementById('submitButton').disabled = false;
+      });
+    });
+  });
+
+  // document.getElementById('submit').addEventListener('click', formSubmit);
 
   function formSubmit(event) {
     // event.preventDefault();
