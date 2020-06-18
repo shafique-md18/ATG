@@ -62,3 +62,13 @@ should NOT be recorded.
 the ERROR message should be seen.
  - Insert new parameters in the web form. Log statement should be seen and the
 SUCCESS message should be seen.
+
+## Task 3
+
+Convert your web form to use API for submitting data using AJAX. Use the route/function
+in WebServicesController.php file (task 2) and NOT the ATGcontroller.php file (task 1)
+on the web application form itself using AJAX.
+- There should be no page refreshes at all (that’s what AJAX means).
+- Based on the API’s JSON response, AJAX call should be able to determine the
+response and show the appropriate message.
+- Frontend: Email validation and pincode (6 digits exact) validation
