@@ -25,7 +25,7 @@ Route::get('users/id/{id}', 'WebServicesController@show');
 Route::get('users/email/{email}', 'WebServicesController@show_by_email');
 
 // list all atg data
-Route::get('users/', 'WebServicesController@index');
+Route::get('users', 'WebServicesController@index');
 
 // create new user info
-Route::post('users/', 'WebServicesController@store');
+Route::post('users', 'WebServicesController@store');

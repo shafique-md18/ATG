@@ -121,7 +121,7 @@
           pincode: $('#pincodeInput').val()
         },
         type: 'POST',
-        url: '/api/users/'
+        url: '/api/users'
       })
       .done(function (data) {
         if (data.status === 0) {
