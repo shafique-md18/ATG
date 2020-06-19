@@ -52,23 +52,27 @@ class WebServicesController extends Controller
             ];        
         }
 
-        if ($this->checkRecordExists($request->all()))
+        // convert request data to lowercase
+        // (for case-sensitive db e.g. PostgreSQL)
+        $validatedData = [
+            'name' => strtolower($request->name),
+            'email' => strtolower($request->email),
+            'pincode' => $request->pincode
+        ];
+
+        if ($this->checkRecordExists($validatedData))
         {
             return [
                 'status' => 0,
                 'message' => 'Same record already exists!',
-                'data' => $request->all(),
+                'data' => $validatedData,
                 // same format as of the Validator->errors()
                 'errors' => ['duplicate' => ['Same record already exists!']]
             ];
         }
 
         // save this record
-        $atg = $this->saveRecord([
-            'name' => strtolower($request->name),
-            'email' => strtolower($request->email),
-            'pincode' => $request->pincode
-        ]);
+        $atg = $this->saveRecord($validatedData);
 
         // send email
         $this->sendAndLogEmail($atg);
@@ -76,7 +80,7 @@ class WebServicesController extends Controller
         return [
             'status' => 1,
             'message' => 'Successfully received information and saved to database!',
-            'data' => $request->all()
+            'data' => $validatedData
         ];
     }
 
