@@ -64,7 +64,11 @@ class WebServicesController extends Controller
         }
 
         // save this record
-        $atg = $this->saveRecord($request->all());
+        $atg = $this->saveRecord([
+            'name' => strtolower($request->name),
+            'email' => strtolower($request->email),
+            'pincode' => $request->pincode
+        ]);
 
         // send email
         $this->sendAndLogEmail($atg);
