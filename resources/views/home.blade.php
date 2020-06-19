@@ -11,30 +11,6 @@
   <div class="card mb-4">
     <div class="card-body">
       <div id="message"></div>
-      @isset($message)
-          <div class="{{ $message['classes'] }}">
-            <ul class="mt-0 mb-0 pl-0">
-                <li style="list-style: none;">
-                  @if ($message['success'] == 0)
-                  <i class="fas fa-times pr-2"></i>
-                  @endif
-                  @if ($message['success'] == 1)
-                  <i class="fas fa-check pr-2"></i>
-                  @endif
-                  {{ $message['body'] }}
-                </li>
-            </ul>
-          </div>
-      @endisset
-      @if ($errors->any())
-        <div class="alert alert-danger">
-          <ul style="margin-top: 0; margin-bottom: 0;">
-              @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-              @endforeach
-          </ul>
-        </div><br />
-      @endif
       <h4 style="text-decoration: underline; font-family: Open Sans">
         <i class="far fa-plus-square pr-2"></i>Input New User Information</h4>
       <form action="/" method="POST" id="myForm">
@@ -147,6 +123,8 @@
           document.getElementById('myForm').reset();
         }
         formSubmitButtonReset();
+        var message = document.getElementById("message");
+        message.scrollIntoView(true);
       });
     });
   });
